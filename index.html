@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#101114">
+  <title>MOVIE HUB</title>
+  <style>
+    :root { color-scheme: dark; --bg:#101114; --panel:#191b20; --line:#2b2e36; --muted:#a5a8b1; --accent:#20a45b; }
+    * { box-sizing:border-box; }
+    body { margin:0; background:var(--bg); color:#f6f6f7; font-family:Arial,Helvetica,sans-serif; }
+    header { padding:26px 16px 20px; text-align:center; background:#15171c; border-bottom:1px solid var(--line); }
+    h1 { margin:0; font-size:clamp(27px,6vw,38px); letter-spacing:2px; }
+    .tagline { margin:7px 0 0; color:var(--muted); font-size:12px; letter-spacing:2px; }
+    main { width:min(760px,100%); margin:0 auto; padding:22px 14px 40px; }
+    .section-title { margin:0 0 13px; font-size:17px; }
+    .movie-list { background:var(--panel); border:1px solid var(--line); border-radius:12px; overflow:hidden; }
+    .movie { display:grid; grid-template-columns:52px minmax(0,1fr) auto; gap:10px; align-items:center; padding:15px 13px; border-bottom:1px solid var(--line); }
+    .movie:last-child { border-bottom:0; }
+    .sno { color:var(--muted); font-weight:700; font-size:14px; }
+    .name { font-size:15px; font-weight:600; line-height:1.35; overflow-wrap:anywhere; }
+    .download { display:inline-block; background:var(--accent); color:white; text-decoration:none; padding:10px 13px; border-radius:7px; font-size:11px; font-weight:700; letter-spacing:.4px; white-space:nowrap; }
+    .download:hover { background:#18864a; }
+    .empty { padding:22px 14px; color:var(--muted); text-align:center; }
+    footer { color:#777b85; text-align:center; padding:20px 12px 30px; font-size:12px; }
+    @media (max-width:420px) { .movie { grid-template-columns:34px minmax(0,1fr) auto; gap:8px; padding:13px 10px; } .download { padding:9px 9px; font-size:10px; } .name { font-size:14px; } }
+  </style>
+</head>
+<body>
+  <header>
+    <h1>MOVIE HUB</h1>
+    <p class="tagline">MOVIE COLLECTION</p>
+  </header>
+  <main>
+    <h2 class="section-title">Tamil Movies</h2>
+    <section class="movie-list" id="movieList" aria-label="Movie list"></section>
+  </main>
+  <footer>© <span id="year"></span> MOVIE HUB</footer>
+  <script>
+    // Add only movies you own or are authorized to distribute.
+    // Replace each downloadUrl with your authorized file URL.
+    const movies = [
+      { name: "Your Movie Name 1", downloadUrl: "" },
+      { name: "Your Movie Name 2", downloadUrl: "" },
+      { name: "Your Movie Name 3", downloadUrl: "" }
+    ];
+
+    const list = document.getElementById("movieList");
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    movies.forEach((movie, index) => {
+      const row = document.createElement("div");
+      row.className = "movie";
+
+      const number = document.createElement("span");
+      number.className = "sno";
+      number.textContent = `${index + 1}.`;
+
+      const name = document.createElement("span");
+      name.className = "name";
+      name.textContent = movie.name;
+
+      const link = document.createElement("a");
+      link.className = "download";
+      link.textContent = "DOWNLOAD";
+      if (movie.downloadUrl) {
+        link.href = movie.downloadUrl;
+        link.target = "_blank";
+        link.rel = "noopener noreferrer";
+      } else {
+        link.href = "#";
+        link.setAttribute("aria-label", `Download link not added for ${movie.name}`);
+        link.addEventListener("click", event => {
+          event.preventDefault();
+          alert("Download link இன்னும் add செய்யப்படவில்லை.");
+        });
+      }
+
+      row.append(number, name, link);
+      list.appendChild(row);
+    });
+
+    if (!movies.length) list.innerHTML = '<p class="empty">No movies added yet.</p>';
+  </script>
+</body>
+</html>
